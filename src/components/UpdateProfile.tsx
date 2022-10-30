@@ -1,19 +1,18 @@
 import React from "react";
 import Form from "./Form";
-import { updateProfile } from 'firebase/auth'
-import type { User } from "firebase/auth";
+import { useUser } from "contexts/User";
+import { doc, setDoc } from "firebase/firestore";
+import { useFirebaseApp } from "contexts/FirebaseApp";
+import { useCallback } from "react";
 
-interface Props {
-  user: User
-  onCompleted?: () => void
-}
+export default function UpdateProfile() {
+  const user = useUser()
+  const { firestore } = useFirebaseApp()
 
-export default function UpdateProfile({ user, onCompleted }: Props) {
-  const update = async (e: React.FormEvent<HTMLFormElement>) => {
-    const displayName: string = e.currentTarget['user[name]'].value
-    await updateProfile(user, { displayName })
-    if (onCompleted) onCompleted()
-  }
+  const update = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    const name: string = e.currentTarget['user[name]'].value
+    await setDoc(doc(firestore, `users/${user!.uid}`), { name })
+  }, [user, firestore])
 
   return (
     <Form onSubmit={update}>

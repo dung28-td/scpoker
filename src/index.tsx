@@ -4,19 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import AuthProvider from 'components/AuthProvider';
-import { auth } from 'config/firebase';
+import FirebaseProvider from 'components/FirebaseProvider';
+import { app } from 'config/firebase';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <AuthProvider auth={auth}>
+    <FirebaseProvider app={app}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </AuthProvider>
+    </FirebaseProvider>
   </React.StrictMode>
 );
 

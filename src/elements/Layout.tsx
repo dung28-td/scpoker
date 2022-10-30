@@ -2,6 +2,9 @@ import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
   return (
-    <Outlet />
+    <>
+      <header className='h-16' />
+      <Outlet />
+    </>
   )
 }

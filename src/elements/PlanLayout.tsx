@@ -4,10 +4,22 @@ import { useUser } from "contexts/User"
 import useSignInAnonymously from "hooks/useSignInAnonymously"
 import Loading from "components/Loading"
 import UpdateProfile from "components/UpdateProfile"
-import useRerender from "hooks/useRerender"
+import useDoc from "hooks/useDoc"
+
+function Main() {
+  const user = useUser()
+  const { data, loading } = useDoc<User>(`users/${user?.uid}`)
+
+  if (loading) return <Loading />
+
+  if (!data?.name) return <UpdateProfile />
+
+  return (
+    <Outlet />
+  )
+}
 
 export default function PlanLayout() {
-  const rerender = useRerender()
   const signInAnonymously = useSignInAnonymously()
   const user = useUser()
 
@@ -15,14 +27,5 @@ export default function PlanLayout() {
 
   if (!user) return <Loading />
 
-  if (!user.displayName) return (
-    <UpdateProfile
-      user={user}
-      onCompleted={rerender}
-    />
-  )
-
-  return (
-    <Outlet />
-  )
+  return <Main />
 }
