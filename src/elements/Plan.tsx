@@ -77,7 +77,7 @@ export default function Plan() {
         </TicketContainer>
       ) : (
         <div className="container mx-auto">
-          <div className="h-screen -mt-16 flex justify-center items-center space-x-8">
+          <div className="h-screen -mt-16 flex flex-col sm:flex-row justify-center items-center space-y-8 sm:space-x-8 sm:space-y-0">
             <div>
               <QRCodeSVG
                 value={url}

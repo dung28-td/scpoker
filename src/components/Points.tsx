@@ -16,23 +16,22 @@ export default function Points() {
 
   return (
     <RadioGroup
-      value={data?.votes[uid]}
+      value={data?.votes[uid] ?? null}
       onChange={vote}
       disabled={!data?.voting}
-      className='mx-4'
+      className='px-4 w-max sm:w-full'
     >
       <RadioGroup.Label className="sr-only">
         Choose a point
       </RadioGroup.Label>
-      <div className="flex space-x-4 justify-center">
+      <div className="flex space-x-4 sm:justify-center">
         {points.map(point => (
           <RadioGroup.Option
             key={point}
             value={point}
-            className={({ active }) => clsx(
-              'bg-white shadow-sm text-gray-900 cursor-pointer',
-              active ? 'ring-2 ring-indigo-500' : '',
-              'group relative border rounded-md h-20 w-16 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none'
+            className={clsx(
+              'bg-white shadow-sm text-gray-900 cursor-pointer flex-shrink-0',
+              'group relative border rounded-md h-20 w-16 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 outline-none'
             )}
           >
             {({ active, checked }) => (
@@ -41,7 +40,7 @@ export default function Points() {
                 <span
                   className={clsx(
                     active ? 'border' : 'border-2',
-                    checked ? 'border-indigo-500' : 'border-transparent',
+                    checked ? 'border-cyan-500' : 'border-transparent',
                     'pointer-events-none absolute -inset-px rounded-md'
                   )}
                   aria-hidden="true"
