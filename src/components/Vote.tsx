@@ -14,17 +14,17 @@ export default function Vote({ id, value, voting }: Props) {
   if (loading) return <Loading />
 
   return (
-    <div className={clsx(
-      "m-4 h-32 w-24 border rounded-md flex flex-col items-center justify-center text-center px-4",
-      Number.isInteger(value) && 'bg-cyan-500 text-white'
-    )}>
-      {!voting && Number.isInteger(value) && (
-        <div className="text-2xl mb-8">
-          {value}
+    <div className="flex justify-center">
+      <div className={clsx(
+        "h-32 border rounded-md flex flex-col justify-between text-center px-4 py-2",
+        Number.isInteger(value) && 'bg-cyan-500 text-white'
+      )}>
+        <div className="text-4xl font-bold mt-2">
+          {!voting && value}
         </div>
-      )}
-      <div className="w-full truncate">
-        {data?.name}
+        <div className="text-sm">
+          {data?.name}
+        </div>
       </div>
     </div>
   )

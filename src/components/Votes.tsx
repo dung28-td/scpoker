@@ -11,17 +11,15 @@ export default function Votes({ plan }: Props) {
   const { data } = useTicket()
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-wrap justify-center items-center -m-4">
-        {memberIds.map(id => (
-          <Vote
-            key={id}
-            id={id}
-            value={data?.votes[id]}
-            voting={!!data?.voting}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+      {memberIds.map(id => (
+        <Vote
+          key={id}
+          id={id}
+          value={data?.votes[id]}
+          voting={!!data?.voting}
+        />
+      ))}
     </div>
   )
 }

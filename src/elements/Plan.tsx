@@ -5,17 +5,15 @@ import Votes from "components/Votes"
 import PlanContext from "contexts/Plan"
 import TicketContext from "contexts/Ticket"
 import useDoc from "hooks/useDoc"
-import { useLocation, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { emptyArray } from "constants/common"
 import { useUser } from "contexts/User"
 import { arrayUnion, updateDoc } from "firebase/firestore"
-import { QRCodeSVG } from 'qrcode.react'
-import Member from "components/Member"
-import Copy from "components/Copy"
-import { ArrowRightCircleIcon } from '@heroicons/react/24/solid'
-import useCreateTicket from "hooks/useCreateTicket"
 import type { DocumentReference } from "firebase/firestore"
 import TicketControl from "components/TicketControl"
+import Container from "components/Container"
+import PlanWelcome from "components/PlanWelcome"
+import Result from "components/Result"
 
 interface Props {
   plan: Plan
@@ -52,11 +50,10 @@ function TicketContainer({ plan, children }: React.PropsWithChildren<Props>) {
 
 export default function Plan() {
   const { planId } = useParams()
-  const { pathname } = useLocation()
+
   const user = useUser()
   const { loading, data, ref } = useDoc<Plan>(`plans/${planId}`)
-  const url = window.location.origin + pathname
-  const createTicket = useCreateTicket(planId!)
+
 
   if (loading) return <Loading />
 
@@ -70,58 +67,25 @@ export default function Plan() {
     <PlanConntainer plan={data} planRef={ref}>
       {data.currentTicketId ? (
         <TicketContainer plan={data} planRef={ref}>
-          <Votes plan={data} />
-          <div className="fixed bottom-0 left-0 right-0 overflow-x-auto border-t py-6">
+          <Container>
+            <div className="max-w-xl mx-auto min-h-[100vh] -mt-16 flex flex-col justify-center pt-16 pb-32 md:pb-44">
+              <Votes plan={data} />
+              <div className="text-center mt-8">
+                <Result />
+              </div>
+            </div>
+          </Container>
+          <div className="bg-white fixed bottom-0 left-0 right-0 overflow-x-auto border-t h-28 sm:h-40 flex items-center sm:justify-center">
             <Footer />
           </div>
         </TicketContainer>
       ) : (
-        <div className="container mx-auto">
-          <div className="h-screen -mt-16 flex flex-col sm:flex-row justify-center items-center space-y-8 sm:space-x-8 sm:space-y-0">
-            <div>
-              <QRCodeSVG
-                value={url}
-                size={240}
-              />
-              <div className="flex w-60 mt-4 items-center rounded border p-2">
-                <p className="truncate flex-1 text-sm mr-1">
-                  {url}
-                </p>
-                <Copy value={url} />
-              </div>
-            </div>
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">
-                  Members
-                </h2>
-                {data.memberIds?.length ? (
-                  <ol className="list-decimal ml-4">
-                    {data.memberIds.map(id => (
-                      <li key={id}>
-                        <Member id={id} />
-                      </li>
-                    ))}
-                  </ol>
-                ) : (
-                  <p>Waiting member to join</p>
-                )}
-              </div>
-              {isOwner && (
-                <button
-                  type="button"
-                  className="group relative flex w-full justify-center rounded-md border border-transparent bg-cyan-500 py-2 px-4 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
-                  onClick={createTicket}
-                >
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <ArrowRightCircleIcon className="h-5 w-5 text-cyan-300" aria-hidden="true" />
-                  </span>
-                  Start
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+        <Container>
+          <PlanWelcome
+            planId={planId!}
+            data={data}
+          />
+        </Container>
       )}
     </PlanConntainer>
   )
